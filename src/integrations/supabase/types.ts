@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ferias: {
+        Row: {
+          created_at: string
+          data_inicio: string
+          data_termino: string
+          id: string
+          matricula: string
+          mes: number
+          nome: string
+          observacoes: string | null
+        }
+        Insert: {
+          created_at?: string
+          data_inicio: string
+          data_termino: string
+          id?: string
+          matricula: string
+          mes: number
+          nome: string
+          observacoes?: string | null
+        }
+        Update: {
+          created_at?: string
+          data_inicio?: string
+          data_termino?: string
+          id?: string
+          matricula?: string
+          mes?: number
+          nome?: string
+          observacoes?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
