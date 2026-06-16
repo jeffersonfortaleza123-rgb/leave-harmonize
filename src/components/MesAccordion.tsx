@@ -117,6 +117,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-muted/50 hover:bg-muted/50">
+                          <TableHead>Posto/Grad</TableHead>
                           <TableHead>Nome</TableHead>
                           <TableHead>Matrícula</TableHead>
                           <TableHead>Início</TableHead>
@@ -131,6 +132,13 @@ export function MesAccordion({ registros, onChanged }: Props) {
                           const status = getStatus(f.data_inicio, f.data_termino);
                           return (
                             <TableRow key={f.id}>
+                              <TableCell>
+                                {f.posto ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-primary/10 text-primary ring-1 ring-primary/20">
+                                    {f.posto}
+                                  </span>
+                                ) : <span className="text-muted-foreground">—</span>}
+                              </TableCell>
                               <TableCell className="font-medium">{f.nome}</TableCell>
                               <TableCell className="text-muted-foreground">{f.matricula}</TableCell>
                               <TableCell>{formatDate(f.data_inicio)}</TableCell>
