@@ -17,33 +17,36 @@ export type Database = {
       ferias: {
         Row: {
           created_at: string
-          data_inicio: string
-          data_termino: string
+          data_inicio: string | null
+          data_termino: string | null
           id: string
           matricula: string
           mes: number
           nome: string
           observacoes: string | null
+          posto: string | null
         }
         Insert: {
           created_at?: string
-          data_inicio: string
-          data_termino: string
+          data_inicio?: string | null
+          data_termino?: string | null
           id?: string
           matricula: string
           mes: number
           nome: string
           observacoes?: string | null
+          posto?: string | null
         }
         Update: {
           created_at?: string
-          data_inicio?: string
-          data_termino?: string
+          data_inicio?: string | null
+          data_termino?: string | null
           id?: string
           matricula?: string
           mes?: number
           nome?: string
           observacoes?: string | null
+          posto?: string | null
         }
         Relationships: []
       }

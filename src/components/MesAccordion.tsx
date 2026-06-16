@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Plus, Pencil, Trash2, Users, CalendarDays } from "lucide-react";
-import { MESES, type Ferias, getStatus, formatDate } from "@/lib/ferias";
+import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,20 +14,23 @@ type Props = {
   onChanged: () => void;
 };
 
-const STATUS_STYLES = {
+const STATUS_STYLES: Record<string, string> = {
   futura: "bg-success/15 text-success-foreground ring-1 ring-success/30",
   andamento: "bg-warning/20 text-warning-foreground ring-1 ring-warning/40",
   encerrada: "bg-neutral/15 text-neutral ring-1 ring-neutral/30",
+  pendente: "bg-muted text-muted-foreground ring-1 ring-border",
 };
-const STATUS_DOT = {
+const STATUS_DOT: Record<string, string> = {
   futura: "bg-success",
   andamento: "bg-warning",
   encerrada: "bg-neutral",
+  pendente: "bg-muted-foreground",
 };
-const STATUS_LABEL = {
+const STATUS_LABEL: Record<string, string> = {
   futura: "Futura",
   andamento: "Em andamento",
   encerrada: "Encerrada",
+  pendente: "Sem data",
 };
 
 export function MesAccordion({ registros, onChanged }: Props) {
@@ -55,7 +58,12 @@ export function MesAccordion({ registros, onChanged }: Props) {
   const porMes = (m: number) =>
     registros
       .filter((r) => r.mes === m)
-      .sort((a, b) => a.data_inicio.localeCompare(b.data_inicio));
+      .sort((a, b) => {
+        const pa = postoRank(a.posto);
+        const pb = postoRank(b.posto);
+        if (pa !== pb) return pa - pb;
+        return (a.data_inicio ?? "9999").localeCompare(b.data_inicio ?? "9999");
+      });
 
   return (
     <>
@@ -109,6 +117,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-muted/50 hover:bg-muted/50">
+                          <TableHead>Posto/Grad</TableHead>
                           <TableHead>Nome</TableHead>
                           <TableHead>Matrícula</TableHead>
                           <TableHead>Início</TableHead>
@@ -123,6 +132,13 @@ export function MesAccordion({ registros, onChanged }: Props) {
                           const status = getStatus(f.data_inicio, f.data_termino);
                           return (
                             <TableRow key={f.id}>
+                              <TableCell>
+                                {f.posto ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-primary/10 text-primary ring-1 ring-primary/20">
+                                    {f.posto}
+                                  </span>
+                                ) : <span className="text-muted-foreground">—</span>}
+                              </TableCell>
                               <TableCell className="font-medium">{f.nome}</TableCell>
                               <TableCell className="text-muted-foreground">{f.matricula}</TableCell>
                               <TableCell>{formatDate(f.data_inicio)}</TableCell>
