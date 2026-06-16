@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Plus, Pencil, Trash2, Users, CalendarDays } from "lucide-react";
-import { MESES, type Ferias, getStatus, formatDate } from "@/lib/ferias";
+import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,20 +14,23 @@ type Props = {
   onChanged: () => void;
 };
 
-const STATUS_STYLES = {
+const STATUS_STYLES: Record<string, string> = {
   futura: "bg-success/15 text-success-foreground ring-1 ring-success/30",
   andamento: "bg-warning/20 text-warning-foreground ring-1 ring-warning/40",
   encerrada: "bg-neutral/15 text-neutral ring-1 ring-neutral/30",
+  pendente: "bg-muted text-muted-foreground ring-1 ring-border",
 };
-const STATUS_DOT = {
+const STATUS_DOT: Record<string, string> = {
   futura: "bg-success",
   andamento: "bg-warning",
   encerrada: "bg-neutral",
+  pendente: "bg-muted-foreground",
 };
-const STATUS_LABEL = {
+const STATUS_LABEL: Record<string, string> = {
   futura: "Futura",
   andamento: "Em andamento",
   encerrada: "Encerrada",
+  pendente: "Sem data",
 };
 
 export function MesAccordion({ registros, onChanged }: Props) {
