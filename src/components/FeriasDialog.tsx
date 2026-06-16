@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MESES, type Ferias } from "@/lib/ferias";
+import { MESES, POSTOS, type Ferias } from "@/lib/ferias";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -20,6 +20,7 @@ type Props = {
 export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSaved }: Props) {
   const [nome, setNome] = useState("");
   const [matricula, setMatricula] = useState("");
+  const [posto, setPosto] = useState<string>("");
   const [mes, setMes] = useState<number>(defaultMes);
   const [dataInicio, setDataInicio] = useState("");
   const [dataTermino, setDataTermino] = useState("");
@@ -31,13 +32,15 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
       if (editing) {
         setNome(editing.nome);
         setMatricula(editing.matricula);
+        setPosto(editing.posto ?? "");
         setMes(editing.mes);
-        setDataInicio(editing.data_inicio);
-        setDataTermino(editing.data_termino);
+        setDataInicio(editing.data_inicio ?? "");
+        setDataTermino(editing.data_termino ?? "");
         setObservacoes(editing.observacoes ?? "");
       } else {
         setNome("");
         setMatricula("");
+        setPosto("");
         setMes(defaultMes);
         setDataInicio("");
         setDataTermino("");
@@ -48,11 +51,11 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!nome || !matricula || !dataInicio || !dataTermino) {
-      toast.error("Preencha todos os campos obrigatórios");
+    if (!nome || !matricula) {
+      toast.error("Informe nome e matrícula");
       return;
     }
-    if (dataTermino < dataInicio) {
+    if (dataInicio && dataTermino && dataTermino < dataInicio) {
       toast.error("Data de término deve ser posterior à de início");
       return;
     }
@@ -60,9 +63,10 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
     const payload = {
       nome: nome.trim(),
       matricula: matricula.trim(),
+      posto: posto || null,
       mes,
-      data_inicio: dataInicio,
-      data_termino: dataTermino,
+      data_inicio: dataInicio || null,
+      data_termino: dataTermino || null,
       observacoes: observacoes.trim() || null,
     };
     const { error } = editing
@@ -86,7 +90,7 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
             {editing ? "Editar férias" : "Adicionar férias"}
           </DialogTitle>
           <DialogDescription>
-            Informe os dados do colaborador e o período de afastamento.
+            Informe os dados do militar e o período de afastamento.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4">
@@ -100,25 +104,36 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
               <Input id="matricula" value={matricula} onChange={(e) => setMatricula(e.target.value)} required />
             </div>
             <div className="grid gap-2">
-              <Label>Mês</Label>
-              <Select value={String(mes)} onValueChange={(v) => setMes(Number(v))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Label>Posto / Graduação</Label>
+              <Select value={posto} onValueChange={setPosto}>
+                <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                 <SelectContent>
-                  {MESES.map((m, i) => (
-                    <SelectItem key={i} value={String(i + 1)}>{m}</SelectItem>
+                  {POSTOS.map((p) => (
+                    <SelectItem key={p} value={p}>{p}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
+          <div className="grid gap-2">
+            <Label>Mês</Label>
+            <Select value={String(mes)} onValueChange={(v) => setMes(Number(v))}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {MESES.map((m, i) => (
+                  <SelectItem key={i} value={String(i + 1)}>{m}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-2">
               <Label htmlFor="ini">Data de início</Label>
-              <Input id="ini" type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} required />
+              <Input id="ini" type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="fim">Data de término</Label>
-              <Input id="fim" type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} required />
+              <Input id="fim" type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} />
             </div>
           </div>
           <div className="grid gap-2">
