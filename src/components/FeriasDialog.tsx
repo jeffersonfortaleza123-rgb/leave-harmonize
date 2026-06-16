@@ -18,9 +18,9 @@ type Props = {
 };
 
 export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSaved }: Props) {
-  const [nome, setNome] = useState("");
   const [matricula, setMatricula] = useState("");
   const [posto, setPosto] = useState<string>("");
+  const [nome, setNome] = useState("");
   const [mes, setMes] = useState<number>(defaultMes);
   const [dataInicio, setDataInicio] = useState("");
   const [dataTermino, setDataTermino] = useState("");
@@ -30,17 +30,17 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
   useEffect(() => {
     if (open) {
       if (editing) {
-        setNome(editing.nome);
         setMatricula(editing.matricula);
         setPosto(editing.posto ?? "");
+        setNome(editing.nome);
         setMes(editing.mes);
         setDataInicio(editing.data_inicio ?? "");
         setDataTermino(editing.data_termino ?? "");
         setObservacoes(editing.observacoes ?? "");
       } else {
-        setNome("");
         setMatricula("");
         setPosto("");
+        setNome("");
         setMes(defaultMes);
         setDataInicio("");
         setDataTermino("");
@@ -51,8 +51,8 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!nome || !matricula) {
-      toast.error("Informe nome e matrícula");
+    if (!matricula.trim() || !posto || !nome.trim()) {
+      toast.error("Matrícula, Posto/Graduação e Nome de Guerra são obrigatórios");
       return;
     }
     if (dataInicio && dataTermino && dataTermino < dataInicio) {
@@ -61,9 +61,9 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
     }
     setSaving(true);
     const payload = {
-      nome: nome.trim(),
       matricula: matricula.trim(),
-      posto: posto || null,
+      posto,
+      nome: nome.trim(),
       mes,
       data_inicio: dataInicio || null,
       data_termino: dataTermino || null,
@@ -95,25 +95,23 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="nome">Nome completo</Label>
-            <Input id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
+            <Label htmlFor="matricula">Matrícula *</Label>
+            <Input id="matricula" value={matricula} onChange={(e) => setMatricula(e.target.value)} required />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="grid gap-2">
-              <Label htmlFor="matricula">Matrícula</Label>
-              <Input id="matricula" value={matricula} onChange={(e) => setMatricula(e.target.value)} required />
-            </div>
-            <div className="grid gap-2">
-              <Label>Posto / Graduação</Label>
-              <Select value={posto} onValueChange={setPosto}>
-                <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
-                <SelectContent>
-                  {POSTOS.map((p) => (
-                    <SelectItem key={p} value={p}>{p}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="grid gap-2">
+            <Label>Posto / Graduação *</Label>
+            <Select value={posto} onValueChange={setPosto}>
+              <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+              <SelectContent>
+                {POSTOS.map((p) => (
+                  <SelectItem key={p} value={p}>{p}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="nome">Nome de Guerra *</Label>
+            <Input id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
           </div>
           <div className="grid gap-2">
             <Label>Mês</Label>
@@ -128,11 +126,11 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="grid gap-2">
-              <Label htmlFor="ini">Data de início</Label>
+              <Label htmlFor="ini">Início das férias</Label>
               <Input id="ini" type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="fim">Data de término</Label>
+              <Label htmlFor="fim">Término das férias</Label>
               <Input id="fim" type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} />
             </div>
           </div>
