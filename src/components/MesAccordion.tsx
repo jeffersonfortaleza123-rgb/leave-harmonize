@@ -58,7 +58,12 @@ export function MesAccordion({ registros, onChanged }: Props) {
   const porMes = (m: number) =>
     registros
       .filter((r) => r.mes === m)
-      .sort((a, b) => a.data_inicio.localeCompare(b.data_inicio));
+      .sort((a, b) => {
+        const pa = postoRank(a.posto);
+        const pb = postoRank(b.posto);
+        if (pa !== pb) return pa - pb;
+        return (a.data_inicio ?? "9999").localeCompare(b.data_inicio ?? "9999");
+      });
 
   return (
     <>
