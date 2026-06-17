@@ -2,12 +2,15 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown } from "lucide-react";
+import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown, ArrowUpDown } from "lucide-react";
 import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+type SortKey = "matricula" | "posto" | "nome";
 
 type Props = {
   registros: Ferias[];
