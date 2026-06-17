@@ -38,6 +38,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export function MesAccordion({ registros, onChanged }: Props) {
+  const { isAdmin } = useAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Ferias | null>(null);
   const [defaultMes, setDefaultMes] = useState(1);
