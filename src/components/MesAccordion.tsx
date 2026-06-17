@@ -145,9 +145,11 @@ export function MesAccordion({ registros, onChanged }: Props) {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" onClick={() => openCreate(openMes!)}>
-                <Plus className="h-4 w-4" /> Adicionar
-              </Button>
+              {isAdmin && (
+                <Button size="sm" onClick={() => openCreate(openMes!)}>
+                  <Plus className="h-4 w-4" /> Adicionar
+                </Button>
+              )}
               <Button size="icon" variant="ghost" onClick={() => setOpenMes(null)} aria-label="Fechar">
                 <X className="h-4 w-4" />
               </Button>
