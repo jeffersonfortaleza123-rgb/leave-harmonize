@@ -199,8 +199,8 @@ export function MesAccordion({ registros, onChanged }: Props) {
                     {itensDoMes.map((f) => {
                       const status = getStatus(f.data_inicio, f.data_termino);
                       return (
-                        <TableRow key={f.id}>
-                          <TableCell className="font-mono text-sm">{f.matricula}</TableCell>
+                        <TableRow key={f.id} className={status === "andamento" ? "bg-warning/10 hover:bg-warning/15" : ""}>
+                          <TableCell className="font-mono text-sm font-semibold">{f.matricula}</TableCell>
                           <TableCell>
                             {f.posto ? (
                               <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-primary/10 text-primary ring-1 ring-primary/20 whitespace-nowrap">
