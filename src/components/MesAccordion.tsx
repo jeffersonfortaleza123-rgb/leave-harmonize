@@ -2,12 +2,15 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown } from "lucide-react";
+import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown, ArrowUpDown } from "lucide-react";
 import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+type SortKey = "matricula" | "posto" | "nome";
 
 type Props = {
   registros: Ferias[];
@@ -39,6 +42,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
   const [defaultMes, setDefaultMes] = useState(1);
   const [openMes, setOpenMes] = useState<number | null>(null);
   const [mesSearch, setMesSearch] = useState<Record<number, string>>({});
+  const [sortKey, setSortKey] = useState<SortKey>("posto");
 
   function openCreate(mes: number) {
     setEditing(null);
@@ -76,12 +80,14 @@ export function MesAccordion({ registros, onChanged }: Props) {
         );
       })
       .sort((a, b) => {
+        if (sortKey === "matricula") return a.matricula.localeCompare(b.matricula);
+        if (sortKey === "nome") return a.nome.localeCompare(b.nome);
         const pa = postoRank(a.posto);
         const pb = postoRank(b.posto);
         if (pa !== pb) return pa - pb;
         return a.matricula.localeCompare(b.matricula);
       });
-  }, [registros, openMes, mesSearch]);
+  }, [registros, openMes, mesSearch, sortKey]);
 
   return (
     <>
@@ -147,14 +153,27 @@ export function MesAccordion({ registros, onChanged }: Props) {
           </div>
 
           <div className="p-4 sm:p-5">
-            <div className="relative mb-4 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por matrícula ou nome de guerra..."
-                value={mesSearch[openMes] ?? ""}
-                onChange={(e) => setMesSearch((s) => ({ ...s, [openMes!]: e.target.value }))}
-                className="pl-9 h-10"
-              />
+            <div className="mb-4 flex flex-col sm:flex-row gap-2 sm:items-center">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por matrícula ou nome de guerra..."
+                  value={mesSearch[openMes] ?? ""}
+                  onChange={(e) => setMesSearch((s) => ({ ...s, [openMes!]: e.target.value }))}
+                  className="pl-9 h-10"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+                  <SelectTrigger className="h-10 w-[180px]"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="posto">Ordenar por Posto/Grad</SelectItem>
+                    <SelectItem value="matricula">Ordenar por Matrícula</SelectItem>
+                    <SelectItem value="nome">Ordenar por Nome</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {itensDoMes.length === 0 ? (
@@ -180,8 +199,8 @@ export function MesAccordion({ registros, onChanged }: Props) {
                     {itensDoMes.map((f) => {
                       const status = getStatus(f.data_inicio, f.data_termino);
                       return (
-                        <TableRow key={f.id}>
-                          <TableCell className="font-mono text-sm">{f.matricula}</TableCell>
+                        <TableRow key={f.id} className={status === "andamento" ? "bg-warning/10 hover:bg-warning/15" : ""}>
+                          <TableCell className="font-mono text-sm font-semibold">{f.matricula}</TableCell>
                           <TableCell>
                             {f.posto ? (
                               <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-primary/10 text-primary ring-1 ring-primary/20 whitespace-nowrap">
