@@ -153,14 +153,27 @@ export function MesAccordion({ registros, onChanged }: Props) {
           </div>
 
           <div className="p-4 sm:p-5">
-            <div className="relative mb-4 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por matrícula ou nome de guerra..."
-                value={mesSearch[openMes] ?? ""}
-                onChange={(e) => setMesSearch((s) => ({ ...s, [openMes!]: e.target.value }))}
-                className="pl-9 h-10"
-              />
+            <div className="mb-4 flex flex-col sm:flex-row gap-2 sm:items-center">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por matrícula ou nome de guerra..."
+                  value={mesSearch[openMes] ?? ""}
+                  onChange={(e) => setMesSearch((s) => ({ ...s, [openMes!]: e.target.value }))}
+                  className="pl-9 h-10"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+                <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+                  <SelectTrigger className="h-10 w-[180px]"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="posto">Ordenar por Posto/Grad</SelectItem>
+                    <SelectItem value="matricula">Ordenar por Matrícula</SelectItem>
+                    <SelectItem value="nome">Ordenar por Nome</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {itensDoMes.length === 0 ? (
