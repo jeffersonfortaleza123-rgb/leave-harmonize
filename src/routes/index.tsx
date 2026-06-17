@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MesAccordion } from "@/components/MesAccordion";
 import { MESES, type Ferias, formatDate, getStatus } from "@/lib/ferias";
 import { Toaster } from "@/components/ui/sonner";
+import { AdminLoginButton } from "@/components/AdminLoginButton";
 import brasaoAsset from "@/assets/brasao.png.asset.json";
 
 export const Route = createFileRoute("/")({
