@@ -80,12 +80,14 @@ export function MesAccordion({ registros, onChanged }: Props) {
         );
       })
       .sort((a, b) => {
+        if (sortKey === "matricula") return a.matricula.localeCompare(b.matricula);
+        if (sortKey === "nome") return a.nome.localeCompare(b.nome);
         const pa = postoRank(a.posto);
         const pb = postoRank(b.posto);
         if (pa !== pb) return pa - pb;
         return a.matricula.localeCompare(b.matricula);
       });
-  }, [registros, openMes, mesSearch]);
+  }, [registros, openMes, mesSearch, sortKey]);
 
   return (
     <>
