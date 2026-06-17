@@ -42,6 +42,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
   const [defaultMes, setDefaultMes] = useState(1);
   const [openMes, setOpenMes] = useState<number | null>(null);
   const [mesSearch, setMesSearch] = useState<Record<number, string>>({});
+  const [sortKey, setSortKey] = useState<SortKey>("posto");
 
   function openCreate(mes: number) {
     setEditing(null);
