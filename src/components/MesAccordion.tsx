@@ -196,7 +196,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
                       <TableHead>Término das férias</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Observações</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
+                      {isAdmin && <TableHead className="text-right">Ações</TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
