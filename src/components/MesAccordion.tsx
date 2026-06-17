@@ -8,6 +8,7 @@ import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown, ArrowUpDown } from
 import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/lib/admin-auth";
 import { toast } from "sonner";
 
 type SortKey = "matricula" | "posto" | "nome";
