@@ -46,10 +46,11 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
-  --shadow-card: 0 1px 2px oklch(0.2 0.04 25 / 0.04), 0 8px 24px -8px oklch(0.2 0.04 25 / 0.08);
-  --shadow-pop: 0 10px 30px -10px oklch(0.55 0.22 25 / 0.35);
-  --gradient-app: radial-gradient(1200px 600px at 10% -10%, oklch(0.96 0.06 30) 0%, transparent 60%), radial-gradient(900px 500px at 100% 0%, oklch(0.95 0.07 45) 0%, transparent 55%), oklch(0.98 0.005 30);
-  --gradient-primary: linear-gradient(135deg, oklch(0.55 0.22 25), oklch(0.65 0.2 45));
+  --shadow-card: 0 1px 2px oklch(0.2 0.05 25 / 0.06), 0 8px 24px -8px oklch(0.2 0.05 25 / 0.12);
+  --shadow-pop: 0 12px 36px -10px oklch(0.5 0.25 25 / 0.45);
+  --gradient-app: radial-gradient(1200px 600px at 10% -10%, oklch(0.94 0.08 25) 0%, transparent 60%), radial-gradient(900px 500px at 100% 0%, oklch(0.93 0.09 35) 0%, transparent 55%), oklch(0.985 0.008 25);
+  --gradient-primary: linear-gradient(135deg, oklch(0.5 0.25 25), oklch(0.58 0.23 30));
+  --gradient-header: linear-gradient(135deg, oklch(0.42 0.22 25) 0%, oklch(0.5 0.25 25) 50%, oklch(0.42 0.22 25) 100%);
 }
 
 :root {
