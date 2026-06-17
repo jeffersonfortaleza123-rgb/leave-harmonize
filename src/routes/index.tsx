@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MesAccordion } from "@/components/MesAccordion";
 import { MESES, type Ferias, formatDate, getStatus } from "@/lib/ferias";
 import { Toaster } from "@/components/ui/sonner";
+import { AdminLoginButton } from "@/components/AdminLoginButton";
 import brasaoAsset from "@/assets/brasao.png.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -68,6 +69,9 @@ function Home() {
         style={{ background: "var(--gradient-header)" }}
       >
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,white,transparent_40%)]" />
+        <div className="absolute top-4 right-4 sm:top-5 sm:right-6 z-10">
+          <AdminLoginButton />
+        </div>
         <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 flex flex-col items-center text-center">
           <img
             src={brasaoAsset.url}

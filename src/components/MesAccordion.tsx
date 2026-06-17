@@ -8,6 +8,7 @@ import { Plus, Pencil, Trash2, Users, Search, X, ChevronDown, ArrowUpDown } from
 import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/lib/admin-auth";
 import { toast } from "sonner";
 
 type SortKey = "matricula" | "posto" | "nome";
@@ -37,6 +38,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export function MesAccordion({ registros, onChanged }: Props) {
+  const { isAdmin } = useAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Ferias | null>(null);
   const [defaultMes, setDefaultMes] = useState(1);
@@ -143,9 +145,11 @@ export function MesAccordion({ registros, onChanged }: Props) {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" onClick={() => openCreate(openMes!)}>
-                <Plus className="h-4 w-4" /> Adicionar
-              </Button>
+              {isAdmin && (
+                <Button size="sm" onClick={() => openCreate(openMes!)}>
+                  <Plus className="h-4 w-4" /> Adicionar
+                </Button>
+              )}
               <Button size="icon" variant="ghost" onClick={() => setOpenMes(null)} aria-label="Fechar">
                 <X className="h-4 w-4" />
               </Button>
@@ -192,7 +196,7 @@ export function MesAccordion({ registros, onChanged }: Props) {
                       <TableHead>Término das férias</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Observações</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
+                      {isAdmin && <TableHead className="text-right">Ações</TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -220,32 +224,34 @@ export function MesAccordion({ registros, onChanged }: Props) {
                           <TableCell className="max-w-[220px] truncate text-muted-foreground" title={f.observacoes ?? ""}>
                             {f.observacoes || "—"}
                           </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-1">
-                              <Button size="icon" variant="ghost" onClick={() => openEdit(f)}>
-                                <Pencil className="h-4 w-4" />
-                              </Button>
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive">
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Excluir registro?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Esta ação removerá permanentemente as férias de {f.nome}.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => handleDelete(f.id)}>Excluir</AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          </TableCell>
+                          {isAdmin && (
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-1">
+                                <Button size="icon" variant="ghost" onClick={() => openEdit(f)}>
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive">
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Excluir registro?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        Esta ação removerá permanentemente as férias de {f.nome}.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => handleDelete(f.id)}>Excluir</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          )}
                         </TableRow>
                       );
                     })}
