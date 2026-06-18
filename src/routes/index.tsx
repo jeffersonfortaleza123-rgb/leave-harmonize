@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, Flame, Shield, Siren, Calendar } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Search, Flame, Shield, Siren, Calendar, Car } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { MesAccordion } from "@/components/MesAccordion";
+import { HabilitacoesPanel } from "@/components/HabilitacoesPanel";
 import { MESES, type Ferias, formatDate, getStatus } from "@/lib/ferias";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLoginButton } from "@/components/AdminLoginButton";
@@ -179,15 +181,30 @@ function Home() {
         )}
 
         <div className="mt-8">
-          {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="aspect-square rounded-2xl bg-card shadow-card animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            <MesAccordion registros={registros} onChanged={load} />
-          )}
+          <Tabs defaultValue="ferias" className="w-full">
+            <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-2 mb-6">
+              <TabsTrigger value="ferias" className="gap-2">
+                <Calendar className="h-4 w-4" /> Férias
+              </TabsTrigger>
+              <TabsTrigger value="habilitacoes" className="gap-2">
+                <Car className="h-4 w-4" /> Habilitações
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="ferias">
+              {loading ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="aspect-square rounded-2xl bg-card shadow-card animate-pulse" />
+                  ))}
+                </div>
+              ) : (
+                <MesAccordion registros={registros} setRegistros={setRegistros} />
+              )}
+            </TabsContent>
+            <TabsContent value="habilitacoes">
+              <HabilitacoesPanel />
+            </TabsContent>
+          </Tabs>
         </div>
 
         <footer className="mt-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
