@@ -14,10 +14,11 @@ type Props = {
   onOpenChange: (v: boolean) => void;
   defaultMes?: number;
   editing?: Ferias | null;
-  onSaved: () => void;
+  registros: Ferias[];
+  setRegistros: React.Dispatch<React.SetStateAction<Ferias[]>>;
 };
 
-export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSaved }: Props) {
+export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, registros, setRegistros }: Props) {
   const [matricula, setMatricula] = useState("");
   const [posto, setPosto] = useState<string>("");
   const [nome, setNome] = useState("");
@@ -28,24 +29,18 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      if (editing) {
-        setMatricula(editing.matricula);
-        setPosto(editing.posto ?? "");
-        setNome(editing.nome);
-        setMes(editing.mes);
-        setDataInicio(editing.data_inicio ?? "");
-        setDataTermino(editing.data_termino ?? "");
-        setObservacoes(editing.observacoes ?? "");
-      } else {
-        setMatricula("");
-        setPosto("");
-        setNome("");
-        setMes(defaultMes);
-        setDataInicio("");
-        setDataTermino("");
-        setObservacoes("");
-      }
+    if (!open) return;
+    if (editing) {
+      setMatricula(editing.matricula);
+      setPosto(editing.posto ?? "");
+      setNome(editing.nome);
+      setMes(editing.mes);
+      setDataInicio(editing.data_inicio ?? "");
+      setDataTermino(editing.data_termino ?? "");
+      setObservacoes(editing.observacoes ?? "");
+    } else {
+      setMatricula(""); setPosto(""); setNome(""); setMes(defaultMes);
+      setDataInicio(""); setDataTermino(""); setObservacoes("");
     }
   }, [open, editing, defaultMes]);
 
@@ -59,9 +54,36 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
       toast.error("Data de término deve ser posterior à de início");
       return;
     }
+    const matNorm = matricula.trim();
+    // Prevent duplicating the same militar in two months
+    const dup = registros.find(
+      (r) => r.matricula === matNorm && r.mes === mes && r.id !== editing?.id,
+    );
+    if (dup) {
+      toast.error(`Este militar já possui férias cadastradas em ${MESES[mes - 1]}.`);
+      return;
+    }
+
     setSaving(true);
+    const previous = registros;
+    const optimistic: Ferias = {
+      id: editing?.id ?? `tmp-${Date.now()}`,
+      matricula: matNorm,
+      posto,
+      nome: nome.trim(),
+      mes,
+      data_inicio: dataInicio || null,
+      data_termino: dataTermino || null,
+      observacoes: observacoes.trim() || null,
+      created_at: editing?.created_at ?? new Date().toISOString(),
+    };
+    setRegistros((cur) =>
+      editing ? cur.map((r) => (r.id === editing.id ? optimistic : r)) : [...cur, optimistic],
+    );
+    onOpenChange(false);
+
     const payload = {
-      matricula: matricula.trim(),
+      matricula: matNorm,
       posto,
       nome: nome.trim(),
       mes,
@@ -69,17 +91,19 @@ export function FeriasDialog({ open, onOpenChange, defaultMes = 1, editing, onSa
       data_termino: dataTermino || null,
       observacoes: observacoes.trim() || null,
     };
-    const { error } = editing
-      ? await supabase.from("ferias").update(payload).eq("id", editing.id)
-      : await supabase.from("ferias").insert(payload);
+    const { data, error } = editing
+      ? await supabase.from("ferias").update(payload).eq("id", editing.id).select().single()
+      : await supabase.from("ferias").insert(payload).select().single();
     setSaving(false);
     if (error) {
-      toast.error(error.message);
+      setRegistros(previous);
+      toast.error(`Erro ao salvar: ${error.message}`);
       return;
     }
+    if (data) {
+      setRegistros((cur) => cur.map((r) => (r.id === optimistic.id ? (data as Ferias) : r)));
+    }
     toast.success(editing ? "Férias atualizadas" : "Férias cadastradas");
-    onSaved();
-    onOpenChange(false);
   }
 
   return (

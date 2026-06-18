@@ -15,7 +15,7 @@ type SortKey = "matricula" | "posto" | "nome";
 
 type Props = {
   registros: Ferias[];
-  onChanged: () => void;
+  setRegistros: React.Dispatch<React.SetStateAction<Ferias[]>>;
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -37,7 +37,7 @@ const STATUS_LABEL: Record<string, string> = {
   pendente: "Sem data",
 };
 
-export function MesAccordion({ registros, onChanged }: Props) {
+export function MesAccordion({ registros, setRegistros }: Props) {
   const { isAdmin } = useAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Ferias | null>(null);
@@ -57,10 +57,14 @@ export function MesAccordion({ registros, onChanged }: Props) {
     setDialogOpen(true);
   }
   async function handleDelete(id: string) {
+    const previous = registros;
+    setRegistros((cur) => cur.filter((r) => r.id !== id));
     const { error } = await supabase.from("ferias").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      setRegistros(previous);
+      return toast.error(error.message);
+    }
     toast.success("Registro removido");
-    onChanged();
   }
 
   const countsByMes = useMemo(() => {
@@ -268,7 +272,8 @@ export function MesAccordion({ registros, onChanged }: Props) {
         onOpenChange={setDialogOpen}
         defaultMes={defaultMes}
         editing={editing}
-        onSaved={onChanged}
+        registros={registros}
+        setRegistros={setRegistros}
       />
     </>
   );
