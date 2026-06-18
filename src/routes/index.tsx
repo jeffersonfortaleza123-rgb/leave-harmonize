@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, Flame, Shield, Siren, Calendar } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Search, Flame, Shield, Siren, Calendar, Car } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { MesAccordion } from "@/components/MesAccordion";
+import { HabilitacoesPanel } from "@/components/HabilitacoesPanel";
 import { MESES, type Ferias, formatDate, getStatus } from "@/lib/ferias";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLoginButton } from "@/components/AdminLoginButton";
