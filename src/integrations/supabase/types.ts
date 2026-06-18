@@ -50,6 +50,45 @@ export type Database = {
         }
         Relationships: []
       }
+      habilitacoes: {
+        Row: {
+          categorias: string[]
+          created_at: string
+          id: string
+          matricula: string
+          nome: string
+          observacoes: string | null
+          piloto_drone: boolean
+          piloto_embarcacao: boolean
+          posto: string | null
+          updated_at: string
+        }
+        Insert: {
+          categorias?: string[]
+          created_at?: string
+          id?: string
+          matricula: string
+          nome: string
+          observacoes?: string | null
+          piloto_drone?: boolean
+          piloto_embarcacao?: boolean
+          posto?: string | null
+          updated_at?: string
+        }
+        Update: {
+          categorias?: string[]
+          created_at?: string
+          id?: string
+          matricula?: string
+          nome?: string
+          observacoes?: string | null
+          piloto_drone?: boolean
+          piloto_embarcacao?: boolean
+          posto?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
