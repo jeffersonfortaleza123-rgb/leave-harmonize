@@ -1,4 +1,4 @@
-export const CATEGORIAS = ["A", "B", "C", "D", "E"] as const;
+export const CATEGORIAS = ["A", "AB", "B", "C", "D", "E"] as const;
 export type Categoria = (typeof CATEGORIAS)[number];
 
 export type Habilitacao = {
