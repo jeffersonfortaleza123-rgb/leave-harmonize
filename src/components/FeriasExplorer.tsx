@@ -236,7 +236,7 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
                         )}
                       </div>
 
-                      <div className="p-4 space-y-3">
+                      <div className="p-4 space-y-4">
                         <div className="flex flex-col sm:flex-row gap-2">
                           <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -260,12 +260,66 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
                           </div>
                         </div>
 
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-muted-foreground mr-1">
+                            <Filter className="h-3.5 w-3.5" /> Filtros
+                          </span>
+                          {CATEGORIAS.map((c) => {
+                            const on = filterCats.includes(c);
+                            return (
+                              <button
+                                key={c}
+                                type="button"
+                                onClick={() => toggleCat(c)}
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ring-1 transition ${
+                                  on
+                                    ? "bg-primary text-primary-foreground ring-primary shadow-sm"
+                                    : "bg-card text-foreground ring-border hover:ring-primary/40"
+                                }`}
+                              >
+                                <Car className="h-3 w-3" /> {c}
+                              </button>
+                            );
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => setFilterDrone((v) => !v)}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ring-1 transition ${
+                              filterDrone
+                                ? "bg-primary text-primary-foreground ring-primary shadow-sm"
+                                : "bg-card text-foreground ring-border hover:ring-primary/40"
+                            }`}
+                          >
+                            <Plane className="h-3 w-3" /> Drone
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFilterEmb((v) => !v)}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ring-1 transition ${
+                              filterEmb
+                                ? "bg-primary text-primary-foreground ring-primary shadow-sm"
+                                : "bg-card text-foreground ring-border hover:ring-primary/40"
+                            }`}
+                          >
+                            <Ship className="h-3 w-3" /> Embarcação
+                          </button>
+                          {filtersActive && (
+                            <button
+                              type="button"
+                              onClick={clearFilters}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+                            >
+                              <X className="h-3 w-3" /> Limpar
+                            </button>
+                          )}
+                        </div>
+
                         {itensDoMes.length === 0 ? (
                           <div className="rounded-xl border border-dashed py-10 text-center text-sm text-muted-foreground">
                             Nenhum militar encontrado.
                           </div>
                         ) : (
-                          <ul className="grid sm:grid-cols-2 gap-3">
+                          <ul className="flex flex-col gap-2.5">
                             {itensDoMes.map((f) => {
                               const status = getStatus(f.data_inicio, f.data_termino);
                               const meta = STATUS_META[status];
@@ -274,34 +328,27 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
                               return (
                                 <li
                                   key={f.id}
-                                  className="group relative rounded-xl border bg-card p-4 shadow-card hover:shadow-pop hover:-translate-y-0.5 transition-all"
+                                  className="group relative rounded-xl border bg-card pl-4 pr-3 py-3 shadow-card hover:shadow-pop transition-all"
                                 >
-                                  <span className={`absolute left-0 top-4 bottom-4 w-1 rounded-r ${meta.dot}`} />
-                                  <div className="flex items-start justify-between gap-2">
-                                    <div className="min-w-0">
-                                      <div className="flex items-baseline gap-2 flex-wrap">
-                                        <span className="font-mono text-sm font-bold text-primary">{f.matricula}</span>
-                                        {f.posto && (
-                                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary ring-1 ring-primary/20">
-                                            {f.posto}
-                                          </span>
-                                        )}
+                                  <span className={`absolute left-0 top-3 bottom-3 w-1 rounded-r ${meta.dot}`} />
+                                  <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+                                    {/* Identidade */}
+                                    <div className="flex items-center gap-3 min-w-0 lg:w-[300px] shrink-0">
+                                      <div className="flex flex-col min-w-0">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                          <span className="font-mono text-sm font-bold text-primary">{f.matricula}</span>
+                                          {f.posto && (
+                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary ring-1 ring-primary/20">
+                                              {f.posto}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <span className="font-semibold uppercase tracking-wide truncate text-sm">{f.nome}</span>
                                       </div>
-                                      <div className="mt-0.5 font-semibold uppercase tracking-wide truncate">{f.nome}</div>
                                     </div>
-                                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 whitespace-nowrap ${meta.chip}`}>
-                                      <StatusIcon className="h-3 w-3" />
-                                      {meta.label}
-                                    </span>
-                                  </div>
 
-                                  <div className="mt-3 text-xs text-muted-foreground flex items-center gap-1.5">
-                                    <CalendarDays className="h-3.5 w-3.5" />
-                                    {formatDate(f.data_inicio)} <span className="opacity-60">→</span> {formatDate(f.data_termino)}
-                                  </div>
-
-                                  {(hab || f.observacoes) && (
-                                    <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                                    {/* Habilitações */}
+                                    <div className="flex flex-wrap items-center gap-1 lg:flex-1 lg:min-w-0">
                                       {hab?.categorias?.map((c) => (
                                         <span key={c} className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-accent text-accent-foreground ring-1 ring-accent-foreground/10">
                                           <Car className="h-3 w-3" /> {c}
@@ -317,39 +364,58 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
                                           <Ship className="h-3 w-3" /> Embarcação
                                         </span>
                                       )}
+                                      {!hab?.categorias?.length && !hab?.piloto_drone && !hab?.piloto_embarcacao && (
+                                        <span className="text-[10px] text-muted-foreground italic">sem habilitação</span>
+                                      )}
                                     </div>
-                                  )}
+
+                                    {/* Datas */}
+                                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground lg:w-[220px] shrink-0">
+                                      <CalendarDays className="h-3.5 w-3.5 shrink-0" />
+                                      <span className="whitespace-nowrap">
+                                        {formatDate(f.data_inicio)} <span className="opacity-60">→</span> {formatDate(f.data_termino)}
+                                      </span>
+                                    </div>
+
+                                    {/* Status + ações */}
+                                    <div className="flex items-center justify-between lg:justify-end gap-2 lg:w-[200px] shrink-0">
+                                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ring-1 whitespace-nowrap ${meta.chip}`}>
+                                        <StatusIcon className="h-3 w-3" />
+                                        {meta.label}
+                                      </span>
+                                      {isAdmin && (
+                                        <div className="flex items-center gap-0.5">
+                                          <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openEdit(f)}>
+                                            <Pencil className="h-3.5 w-3.5" />
+                                          </Button>
+                                          <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                              <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive">
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                              </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                              <AlertDialogHeader>
+                                                <AlertDialogTitle>Excluir registro?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                  Esta ação removerá permanentemente as férias de {f.nome}.
+                                                </AlertDialogDescription>
+                                              </AlertDialogHeader>
+                                              <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => handleDelete(f.id)}>Excluir</AlertDialogAction>
+                                              </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                          </AlertDialog>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
 
                                   {f.observacoes && (
-                                    <p className="mt-2 text-xs text-muted-foreground line-clamp-2" title={f.observacoes}>
-                                      {f.observacoes}
-                                    </p>
-                                  )}
-
-                                  {isAdmin && (
-                                    <div className="mt-3 pt-3 border-t flex justify-end gap-1">
-                                      <Button size="icon" variant="ghost" onClick={() => openEdit(f)}>
-                                        <Pencil className="h-4 w-4" />
-                                      </Button>
-                                      <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                          <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive">
-                                            <Trash2 className="h-4 w-4" />
-                                          </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                          <AlertDialogHeader>
-                                            <AlertDialogTitle>Excluir registro?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                              Esta ação removerá permanentemente as férias de {f.nome}.
-                                            </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => handleDelete(f.id)}>Excluir</AlertDialogAction>
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                      </AlertDialog>
+                                    <div className="mt-2 pt-2 border-t flex items-start gap-1.5 text-xs text-muted-foreground">
+                                      <FileText className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                                      <p className="line-clamp-2" title={f.observacoes}>{f.observacoes}</p>
                                     </div>
                                   )}
                                 </li>
