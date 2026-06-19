@@ -44,6 +44,9 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
   const [openMes, setOpenMes] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("posto");
+  const [filterCats, setFilterCats] = useState<string[]>([]);
+  const [filterDrone, setFilterDrone] = useState(false);
+  const [filterEmb, setFilterEmb] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Ferias | null>(null);
   const [defaultMes, setDefaultMes] = useState(1);
