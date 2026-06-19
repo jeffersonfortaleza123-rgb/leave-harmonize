@@ -109,6 +109,14 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
     return (regsByYear.get(openYear) ?? [])
       .filter((r) => r.mes === openMes)
       .filter((r) => !q || r.matricula.toLowerCase().includes(q) || r.nome.toLowerCase().includes(q))
+      .filter((r) => {
+        if (!filterCats.length && !filterDrone && !filterEmb) return true;
+        const h = habByMat.get(r.matricula);
+        if (filterCats.length && !filterCats.every((c) => h?.categorias?.includes(c))) return false;
+        if (filterDrone && !h?.piloto_drone) return false;
+        if (filterEmb && !h?.piloto_embarcacao) return false;
+        return true;
+      })
       .sort((a, b) => {
         if (sortKey === "matricula") return a.matricula.localeCompare(b.matricula);
         if (sortKey === "nome") return a.nome.localeCompare(b.nome);
@@ -116,7 +124,13 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
         if (pa !== pb) return pa - pb;
         return a.matricula.localeCompare(b.matricula);
       });
-  }, [regsByYear, openYear, openMes, search, sortKey]);
+  }, [regsByYear, openYear, openMes, search, sortKey, filterCats, filterDrone, filterEmb, habByMat]);
+
+  const filtersActive = filterCats.length > 0 || filterDrone || filterEmb;
+  function toggleCat(c: string) {
+    setFilterCats((cur) => cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c]);
+  }
+  function clearFilters() { setFilterCats([]); setFilterDrone(false); setFilterEmb(false); }
 
   function openCreate(mes: number) { setEditing(null); setDefaultMes(mes); setDialogOpen(true); }
   function openEdit(f: Ferias) { setEditing(f); setDefaultMes(f.mes); setDialogOpen(true); }
