@@ -9,9 +9,10 @@ import {
 import {
   CalendarDays, ChevronRight, Plus, Pencil, Trash2, Search, Users,
   Plane, Ship, Car, ArrowUpDown, CalendarCheck2, CalendarClock, CalendarX2,
+  FileText, Filter, X,
 } from "lucide-react";
 import { MESES, type Ferias, getStatus, formatDate, postoRank } from "@/lib/ferias";
-import type { Habilitacao } from "@/lib/habilitacoes";
+import { CATEGORIAS, type Habilitacao } from "@/lib/habilitacoes";
 import { FeriasDialog } from "./FeriasDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/lib/admin-auth";
