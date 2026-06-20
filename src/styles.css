@@ -46,15 +46,26 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --color-gb-red: var(--gb-red);
+  --color-gb-gold: var(--gb-gold);
+  --color-gb-navy: var(--gb-navy);
+  --color-gb-cream: var(--gb-cream);
   --shadow-card: 0 1px 2px oklch(0.2 0.05 25 / 0.06), 0 8px 24px -8px oklch(0.2 0.05 25 / 0.12);
   --shadow-pop: 0 12px 36px -10px oklch(0.5 0.25 25 / 0.45);
+  --shadow-gold: 0 10px 30px -10px oklch(0.78 0.15 85 / 0.5);
   --gradient-app: radial-gradient(1200px 600px at 10% -10%, oklch(0.94 0.08 25) 0%, transparent 60%), radial-gradient(900px 500px at 100% 0%, oklch(0.93 0.09 35) 0%, transparent 55%), oklch(0.985 0.008 25);
   --gradient-primary: linear-gradient(135deg, oklch(0.5 0.25 25), oklch(0.58 0.23 30));
   --gradient-header: linear-gradient(135deg, oklch(0.42 0.22 25) 0%, oklch(0.5 0.25 25) 50%, oklch(0.42 0.22 25) 100%);
+  --gradient-gb-hero: linear-gradient(135deg, oklch(0.18 0.05 25) 0%, oklch(0.35 0.18 25) 100%);
 }
 
 :root {
   --radius: 0.875rem;
+  --gb-red: oklch(0.5 0.25 25);
+  --gb-gold: oklch(0.78 0.15 85);
+  --gb-navy: oklch(0.22 0.08 260);
+  --gb-cream: oklch(0.97 0.02 80);
   --background: oklch(0.98 0.005 30);
   --foreground: oklch(0.18 0.03 30);
   --card: oklch(1 0 0);
