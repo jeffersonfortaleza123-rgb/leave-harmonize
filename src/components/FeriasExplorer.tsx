@@ -440,6 +440,8 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
         editing={editing}
         registros={registros}
         setRegistros={setRegistros}
+        habilitacoes={habilitacoes}
+        setHabilitacoes={setHabilitacoes}
       />
     </div>
   );
