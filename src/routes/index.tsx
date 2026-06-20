@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -71,7 +71,13 @@ function Home() {
         style={{ background: "var(--gradient-header)" }}
       >
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,white,transparent_40%)]" />
-        <div className="absolute top-4 right-4 sm:top-5 sm:right-6 z-10">
+        <div className="absolute top-4 right-4 sm:top-5 sm:right-6 z-10 flex items-center gap-2">
+          <Link
+            to="/sobre"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/10 text-white text-xs font-bold uppercase tracking-wider border border-white/20 hover:bg-white/20 transition"
+          >
+            Sobre o 3º GB
+          </Link>
           <AdminLoginButton />
         </div>
         <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 flex flex-col items-center text-center">
