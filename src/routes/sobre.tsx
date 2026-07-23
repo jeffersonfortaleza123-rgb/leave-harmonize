@@ -241,7 +241,7 @@ function Historia() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
         <Reveal>
           <SectionTag>Nossa História</SectionTag>
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-[var(--gb-navy)] leading-tight">
+          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-foreground leading-tight">
             Tradição forjada no fogo e no compromisso
           </h2>
           <div className="my-6 h-1 w-20 bg-[var(--gb-gold)]" />
@@ -349,7 +349,7 @@ function Servicos() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal className="text-center max-w-2xl mx-auto">
           <SectionTag>O que fazemos</SectionTag>
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-[var(--gb-navy)]">
+          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-foreground">
             Nossos Serviços
           </h2>
           <div className="mx-auto my-6 h-1 w-20 bg-[var(--gb-gold)]" />
@@ -361,12 +361,12 @@ function Servicos() {
         <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((it) => (
             <Reveal key={it.title}>
-              <div className="group h-full rounded-2xl bg-white p-7 border border-[var(--gb-navy)]/10 hover:border-[var(--gb-red)]/40 hover:-translate-y-1 hover:shadow-xl transition-all relative overflow-hidden">
+              <div className="group h-full rounded-2xl bg-card p-7 border border-white/10 hover:border-[var(--gb-red)]/40 hover:-translate-y-1 hover:shadow-xl transition-all relative overflow-hidden">
                 <div className="absolute top-0 right-0 h-24 w-24 bg-[var(--gb-red)]/5 rounded-full blur-2xl group-hover:bg-[var(--gb-red)]/15 transition" />
                 <div className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gb-red)] to-[oklch(0.42_0.22_25)] text-white shadow-md ring-2 ring-[var(--gb-gold)]/40">
                   <it.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-5 font-serif text-xl font-bold text-[var(--gb-navy)]">
+                <h3 className="mt-5 font-serif text-xl font-bold text-foreground">
                   {it.title}
                 </h3>
                 <p className="mt-2 text-sm text-foreground/70 leading-relaxed">{it.text}</p>
@@ -428,7 +428,7 @@ function Contato() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 grid md:grid-cols-2 gap-12">
         <Reveal>
           <SectionTag>Fale conosco</SectionTag>
-          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-[var(--gb-navy)]">
+          <h2 className="mt-3 font-serif text-4xl sm:text-5xl font-bold text-foreground">
             Contato e Emergências
           </h2>
           <div className="my-6 h-1 w-20 bg-[var(--gb-gold)]" />
@@ -448,9 +448,9 @@ function Contato() {
         <Reveal>
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="rounded-2xl bg-white border border-[var(--gb-navy)]/10 p-7 shadow-xl space_y-4 space-y-4"
+            className="rounded-2xl bg-card border border-white/10 p-7 shadow-xl space_y-4 space-y-4"
           >
-            <h3 className="font-serif text-2xl font-bold text-[var(--gb-navy)]">
+            <h3 className="font-serif text-2xl font-bold text-foreground">
               Envie uma mensagem
             </h3>
             <div className="grid sm:grid-cols-2 gap-3">
@@ -459,13 +459,13 @@ function Contato() {
             </div>
             <Field label="E-mail" placeholder="voce@email.com" type="email" />
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-[var(--gb-navy)]/70">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Mensagem
               </label>
               <textarea
                 rows={4}
                 placeholder="Como podemos ajudar?"
-                className="mt-1 w-full rounded-md border border-[var(--gb-navy)]/15 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gb-red)]/40"
+                className="mt-1 w-full rounded-md border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gb-red)]/40"
               />
             </div>
             <button
@@ -487,12 +487,12 @@ function Field({
 }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
-      <label className="text-xs font-bold uppercase tracking-wider text-[var(--gb-navy)]/70">
+      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
         {label}
       </label>
       <input
         {...rest}
-        className="mt-1 w-full rounded-md border border-[var(--gb-navy)]/15 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gb-red)]/40"
+        className="mt-1 w-full rounded-md border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--gb-red)]/40"
       />
     </div>
   );
@@ -514,7 +514,7 @@ function InfoLine({
       className={`flex items-center gap-4 p-4 rounded-xl border ${
         highlight
           ? "bg-[var(--gb-red)] text-white border-[var(--gb-gold)]/50 shadow-[var(--shadow-gold)]"
-          : "bg-white border-[var(--gb-navy)]/10"
+          : "bg-card border-white/10"
       }`}
     >
       <div
@@ -525,10 +525,10 @@ function InfoLine({
         <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0">
-        <div className={`text-[10px] uppercase tracking-[0.2em] font-bold ${highlight ? "text-[var(--gb-gold)]" : "text-[var(--gb-navy)]/60"}`}>
+        <div className={`text-[10px] uppercase tracking-[0.2em] font-bold ${highlight ? "text-[var(--gb-gold)]" : "text-muted-foreground"}`}>
           {label}
         </div>
-        <div className={`font-serif text-xl ${highlight ? "text-white" : "text-[var(--gb-navy)]"}`}>
+        <div className={`font-serif text-xl ${highlight ? "text-white" : "text-foreground"}`}>
           {value}
         </div>
       </div>
