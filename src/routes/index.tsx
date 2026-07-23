@@ -11,6 +11,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { AdminLoginButton } from "@/components/AdminLoginButton";
 import brasaoAsset from "@/assets/brasao.png.asset.json";
 
+function yearOf(r: Ferias): number {
+  if (r.data_inicio) return Number(r.data_inicio.slice(0, 4));
+  return new Date(r.created_at).getFullYear();
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -113,8 +118,13 @@ function Home() {
           </div>
           <div className="flex items-center gap-2 px-4 h-12 rounded-md bg-card border shadow-card text-sm whitespace-nowrap">
             <Shield className="h-4 w-4 text-primary" />
-            <span className="font-bold">{registros.length}</span>
-            <span className="text-muted-foreground">registros</span>
+            <span className="font-bold">{registros.filter(r => yearOf(r) === 2026).length}</span>
+            <span className="text-muted-foreground">em 2026</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 h-12 rounded-md bg-card border shadow-card text-sm whitespace-nowrap">
+            <Shield className="h-4 w-4 text-accent" />
+            <span className="font-bold">{registros.filter(r => yearOf(r) === 2027).length}</span>
+            <span className="text-muted-foreground">em 2027</span>
           </div>
         </div>
 
@@ -187,26 +197,45 @@ function Home() {
         )}
 
         <div className="mt-8">
-          <Tabs defaultValue="ferias" className="w-full">
-            <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-2 mb-6">
-              <TabsTrigger value="ferias" className="gap-2">
-                <Calendar className="h-4 w-4" /> Férias
+          <Tabs defaultValue="ferias2026" className="w-full">
+            <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-3 mb-6">
+              <TabsTrigger value="ferias2026" className="gap-1.5">
+                <Calendar className="h-4 w-4" /> Férias 2026
               </TabsTrigger>
-              <TabsTrigger value="habilitacoes" className="gap-2">
+              <TabsTrigger value="ferias2027" className="gap-1.5">
+                <Calendar className="h-4 w-4" /> Férias 2027
+              </TabsTrigger>
+              <TabsTrigger value="habilitacoes" className="gap-1.5">
                 <Car className="h-4 w-4" /> Habilitações
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="ferias">
-              {loading ? (
-                <div className="space-y-3">
-                  {Array.from({ length: 2 }).map((_, i) => (
-                    <div key={i} className="h-24 rounded-2xl bg-card shadow-card animate-pulse" />
-                  ))}
-                </div>
-              ) : (
-                <FeriasExplorer registros={registros} setRegistros={setRegistros} />
-              )}
-            </TabsContent>
+
+            {/* Skeleton compartilhado */}
+            {loading && (
+              <div className="space-y-3">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="h-24 rounded-2xl bg-card shadow-card animate-pulse" />
+                ))}
+              </div>
+            )}
+
+            {!loading && (
+              <>
+                <TabsContent value="ferias2026">
+                  <FeriasExplorer
+                    registros={registros.filter((r) => yearOf(r) === 2026)}
+                    setRegistros={setRegistros}
+                  />
+                </TabsContent>
+                <TabsContent value="ferias2027">
+                  <FeriasExplorer
+                    registros={registros.filter((r) => yearOf(r) === 2027)}
+                    setRegistros={setRegistros}
+                  />
+                </TabsContent>
+              </>
+            )}
+
             <TabsContent value="habilitacoes">
               <HabilitacoesPanel />
             </TabsContent>
