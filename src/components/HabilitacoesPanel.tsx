@@ -30,7 +30,18 @@ export function HabilitacoesPanel() {
     if (!error && data) setRegistros(data as Habilitacao[]);
     setLoading(false);
   }
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+    const channel = supabase
+      .channel("realtime-habilitacoes-panel")
+      .on("postgres_changes", { event: "*", schema: "public", table: "habilitacoes" }, () => {
+        load();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   async function handleDelete(item: Habilitacao) {
     const previous = registros;

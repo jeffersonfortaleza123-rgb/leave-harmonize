@@ -44,6 +44,15 @@ function Home() {
 
   useEffect(() => {
     load();
+    const channel = supabase
+      .channel("realtime-ferias")
+      .on("postgres_changes", { event: "*", schema: "public", table: "ferias" }, () => {
+        load();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const q = search.trim().toLowerCase();
