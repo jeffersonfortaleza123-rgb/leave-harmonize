@@ -52,9 +52,19 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
   const [defaultMes, setDefaultMes] = useState(1);
 
   useEffect(() => {
-    supabase.from("habilitacoes").select("*").then(({ data }) => {
-      if (data) setHabilitacoes(data as Habilitacao[]);
-    });
+    const loadHab = () => {
+      supabase.from("habilitacoes").select("*").then(({ data }) => {
+        if (data) setHabilitacoes(data as Habilitacao[]);
+      });
+    };
+    loadHab();
+    const channel = supabase
+      .channel(`realtime-hab-explorer-${Math.random().toString(36).slice(2)}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "habilitacoes" }, loadHab)
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const habByMat = useMemo(() => {
