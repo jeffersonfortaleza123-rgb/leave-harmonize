@@ -11,6 +11,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { AdminLoginButton } from "@/components/AdminLoginButton";
 import brasaoAsset from "@/assets/brasao.png.asset.json";
 import heroBg from "@/assets/hero-sertao-chamas.jpg";
+import molduraChamas from "@/assets/moldura-chamas.webp";
+import rodapeImg from "@/assets/rodape-combate.jpg";
 
 function yearOf(r: Ferias): number {
   if (r.data_inicio) return Number(r.data_inicio.slice(0, 4));
@@ -79,6 +81,11 @@ function Home() {
   return (
     <div className="min-h-screen">
       <Toaster richColors position="top-right" />
+      <div
+        className="moldura-chamas"
+        style={{ backgroundImage: `url(${molduraChamas})` }}
+        aria-hidden="true"
+      />
 
       {/* HERO with brasão */}
       <div className="hero-fire relative overflow-hidden">
@@ -257,11 +264,25 @@ function Home() {
           </Tabs>
         </div>
 
-        <footer className="mt-12 text-center text-xs text-muted-foreground flex items-center justify-center gap-1.5">
-          <Flame className="h-3.5 w-3.5 text-primary" />
-          3º Grupamento de Bombeiros — Controle de Férias
-        </footer>
       </div>
+
+      <footer className="rodape-foto mt-12">
+        <div
+          className="rodape-foto-img"
+          style={{ backgroundImage: `url(${rodapeImg})` }}
+          aria-hidden="true"
+        />
+        <div className="relative z-10 px-4 pb-8 text-center">
+          <p className="title-fire font-display text-2xl sm:text-4xl font-extrabold leading-tight">
+            Coragem que protege o Sertão
+          </p>
+          <p className="mt-3 text-xs text-white/75 flex items-center justify-center gap-1.5">
+            <Flame className="h-3.5 w-3.5 text-primary" />
+            3º Grupamento de Bombeiros — Controle de Férias
+          </p>
+        </div>
+        <div className="fire-stripes absolute bottom-0 inset-x-0 z-10" aria-hidden="true" />
+      </footer>
     </div>
   );
 }

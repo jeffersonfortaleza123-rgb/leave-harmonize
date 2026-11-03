@@ -349,3 +349,57 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .hero-fire-photo { animation: none; }
 }
+
+/* ===== Chamas nas laterais (mesmo efeito do portal3gb) ===== */
+.moldura-chamas {
+  position: fixed;
+  inset: 0;
+  z-index: 40; /* abaixo de janelas/modais (z-50) */
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen; /* o preto da imagem some; só a chama ilumina */
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 16%, transparent 84%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, transparent 16%, transparent 84%, #000 100%);
+}
+@media (max-width: 767px) {
+  .moldura-chamas {
+    opacity: 0.18;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 9%, transparent 91%, #000 100%);
+    mask-image: linear-gradient(to right, #000 0%, transparent 9%, transparent 91%, #000 100%);
+  }
+}
+@media print {
+  .moldura-chamas { display: none; }
+}
+
+/* ===== Rodapé com foto de combate ===== */
+.rodape-foto {
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.rodape-foto-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+  animation: hero-zoom 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.rodape-foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, var(--background) 0%, rgb(10 10 10 / 0.55) 30%, rgb(10 10 10 / 0.25) 60%, rgb(10 10 10 / 0.85) 100%);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rodape-foto-img { animation: none; }
+}
