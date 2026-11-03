@@ -1,40 +1,46 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const ADMIN_USER = "SP";
-const ADMIN_PASS = "12345678";
-const STORAGE_KEY = "ferias_admin_v1";
+// Maps the short admin username to its login email. Authorization is enforced by database RLS (admin role).
+const toEmail = (user: string) => `${user.trim().toLowerCase()}@3gb.local`;
 
 type Ctx = {
   isAdmin: boolean;
-  login: (user: string, pass: string) => boolean;
+  login: (user: string, pass: string) => Promise<boolean>;
   logout: () => void;
 };
 
-const AdminCtx = createContext<Ctx>({ isAdmin: false, login: () => false, logout: () => {} });
+const AdminCtx = createContext<Ctx>({ isAdmin: false, login: async () => false, logout: () => {} });
+
+async function checkAdmin(userId: string | undefined) {
+  if (!userId) return false;
+  const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId).eq("role", "admin").maybeSingle();
+  return !!data;
+}
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined" && sessionStorage.getItem(STORAGE_KEY) === "1") {
-        setIsAdmin(true);
-      }
-    } catch {}
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setTimeout(() => { checkAdmin(session?.user.id).then(setIsAdmin); }, 0);
+    });
+    supabase.auth.getSession().then(({ data }) => checkAdmin(data.session?.user.id).then(setIsAdmin));
+    return () => sub.subscription.unsubscribe();
   }, []);
 
-  function login(user: string, pass: string) {
-    if (user.trim() === ADMIN_USER && pass === ADMIN_PASS) {
-      setIsAdmin(true);
-      try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch {}
-      return true;
-    }
-    return false;
+  async function login(user: string, pass: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email: toEmail(user), password: pass });
+    if (error || !data.user) return false;
+    const ok = await checkAdmin(data.user.id);
+    if (!ok) { await supabase.auth.signOut(); return false; }
+    setIsAdmin(true);
+    return true;
   }
 
   function logout() {
     setIsAdmin(false);
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+    supabase.auth.signOut();
   }
 
   return <AdminCtx.Provider value={{ isAdmin, login, logout }}>{children}</AdminCtx.Provider>;

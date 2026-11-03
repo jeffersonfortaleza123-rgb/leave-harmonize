@@ -13,9 +13,9 @@ export function AdminLoginButton() {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (login(user, pass)) {
+    if (await login(user, pass)) {
       toast.success("Login efetuado");
       setOpen(false);
       setUser("");
