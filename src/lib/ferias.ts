@@ -4,7 +4,7 @@ export const MESES = [
 ] as const;
 
 export const POSTOS = [
-  "CEL", "TEN CEL", "MAJ", "CAP", "1º TEN", "2º TEN",
+  "CEL", "TEN CEL", "MAJ", "CAP", "1º TEN", "2º TEN", "ASP",
   "SUB", "1º SGT", "2º SGT", "3º SGT", "CB", "SD",
 ] as const;
 
