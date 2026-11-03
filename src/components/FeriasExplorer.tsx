@@ -145,10 +145,14 @@ export function FeriasExplorer({ registros, setRegistros }: Props) {
   function openCreate(mes: number) { setEditing(null); setDefaultMes(mes); setDialogOpen(true); }
   function openEdit(f: Ferias) { setEditing(f); setDefaultMes(f.mes); setDialogOpen(true); }
   async function handleDelete(id: string) {
-    const previous = registros;
+    const removido = registros.find((r) => r.id === id);
     setRegistros((cur) => cur.filter((r) => r.id !== id));
     const { error } = await supabase.from("ferias").delete().eq("id", id);
-    if (error) { setRegistros(previous); return toast.error(error.message); }
+    if (error) {
+      // devolve só o item removido (a lista recebida aqui é só do ano da aba)
+      if (removido) setRegistros((cur) => [...cur, removido]);
+      return toast.error(error.message);
+    }
     toast.success("Registro removido");
   }
 

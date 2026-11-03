@@ -101,7 +101,6 @@ export function FeriasDialog({
     }
 
     setSaving(true);
-    const previous = registros;
     const optimistic: Ferias = {
       id: editing?.id ?? `tmp-${Date.now()}`,
       matricula: matNorm,
@@ -132,7 +131,12 @@ export function FeriasDialog({
       : await supabase.from("ferias").insert(payload).select().single();
     if (error) {
       setSaving(false);
-      setRegistros(previous);
+      // desfaz só este registro (a lista recebida aqui é só do ano da aba)
+      setRegistros((cur) =>
+        editing
+          ? cur.map((r) => (r.id === editing.id ? editing : r))
+          : cur.filter((r) => r.id !== optimistic.id),
+      );
       toast.error(`Erro ao salvar: ${error.message}`);
       return;
     }
