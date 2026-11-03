@@ -67,24 +67,24 @@
 
   /* Paleta cinematográfica: preto #0A0A0A · grafite #1A1A1A ·
      vermelho #C1121F · laranja #FF6A00 · âmbar #FFC300 */
-  --gb-red: oklch(0.52 0.21 27);
+  --gb-red: #C1121F;
   --gb-orange: oklch(0.71 0.2 45);
-  --gb-gold: oklch(0.85 0.17 88);
+  --gb-gold: #FFC300;
   --gb-navy: oklch(0.22 0.08 260);
   --gb-cream: oklch(0.96 0.015 80);
 
-  --background: oklch(0.15 0.006 30);
-  --foreground: oklch(0.96 0.004 30);
-  --card: oklch(0.21 0.006 30);
-  --card-foreground: oklch(0.96 0.004 30);
-  --popover: oklch(0.19 0.006 30);
-  --popover-foreground: oklch(0.96 0.004 30);
-  --primary: oklch(0.52 0.21 27);
+  --background: #0A0A0A;
+  --foreground: #F5F5F5;
+  --card: #1A1A1A;
+  --card-foreground: #F5F5F5;
+  --popover: #161616;
+  --popover-foreground: #F5F5F5;
+  --primary: #C1121F;
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.25 0.007 30);
+  --secondary: #202020;
   --secondary-foreground: oklch(0.93 0.005 30);
-  --muted: oklch(0.25 0.007 30);
-  --muted-foreground: oklch(0.69 0.008 30);
+  --muted: #1C1C1C;
+  --muted-foreground: #A6A6A6;
   --accent: oklch(0.85 0.17 88);
   --accent-foreground: oklch(0.2 0.02 80);
   --destructive: oklch(0.6 0.22 25);
@@ -95,8 +95,8 @@
   --warning-foreground: oklch(0.25 0.1 70);
   --neutral: oklch(0.6 0.01 30);
   --neutral-foreground: oklch(0.98 0 0);
-  --border: oklch(0.29 0.006 30);
-  --input: oklch(0.27 0.006 30);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
   --ring: oklch(0.71 0.2 45);
   --sidebar: oklch(0.17 0.006 30);
   --sidebar-foreground: oklch(0.92 0.005 30);
@@ -171,4 +171,181 @@
     border: 2px solid oklch(0.17 0.005 30);
   }
   ::-webkit-scrollbar-thumb:hover { background: var(--gb-red); }
+}
+
+/* ===== Tema do Portal 3º GB (mesmo visual do portal3gb) ===== */
+.float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 0.28));
+}
+@keyframes float-3d {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* === Tema Bombeiro: cabeçalho em brasa, faixa de viatura e fagulhas ===== */
+.hero-fire {
+  color: #fff;
+  background:
+    radial-gradient(120% 160% at 88% -30%, oklch(0.55 0.22 40 / 0.5), transparent 55%),
+    radial-gradient(80% 120% at 8% -20%, oklch(0.45 0.2 25 / 0.45), transparent 52%),
+    linear-gradient(180deg, oklch(0.2 0.03 25), oklch(0.13 0.015 25));
+  box-shadow: 0 14px 34px -20px oklch(0.42 0.18 25 / 0.65);
+}
+.hero-fire::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% auto;
+  height: 130%;
+  background: radial-gradient(45% 60% at 50% 0%, oklch(0.6 0.23 45 / 0.28), transparent 70%);
+  animation: fire-breathe 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes fire-breathe {
+  0%, 100% { opacity: 0.55; transform: translateX(-4%) scale(1); }
+  50% { opacity: 1; transform: translateX(4%) scale(1.06); }
+}
+
+.title-fire {
+  background: linear-gradient(90deg, #ffd9a0, #ffb35c 30%, #ff7a3d 60%, #ff4d4d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 8px oklch(0.55 0.2 35 / 0.35));
+}
+
+.brasao-fire {
+  filter: drop-shadow(0 0 10px oklch(0.6 0.22 40 / 0.55)) drop-shadow(0 6px 10px rgb(0 0 0 / 0.45));
+}
+
+/* Faixa diagonal vermelho/âmbar, como a sinalização das viaturas */
+.fire-stripes {
+  height: 8px;
+  background: repeating-linear-gradient(
+    135deg,
+    oklch(0.5 0.2 27) 0 22px,
+    oklch(0.8 0.16 80) 22px 44px
+  );
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.35);
+}
+
+/* Fagulhas subindo no cabeçalho — brasas realistas (núcleo quente + halo, cintilam e sobem em zigue-zague).
+   Cada <span> gera 3 fagulhas (o próprio span + ::before + ::after). */
+.fire-embers { position: absolute; inset: 0; overflow: hidden; }
+.fire-embers span,
+.fire-embers span::before,
+.fire-embers span::after {
+  position: absolute;
+  width: var(--t, 8px);
+  height: calc(var(--t, 8px) * 1.5);
+  border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(ellipse at 50% 42%, #fffdf0 0%, #ffe08a 22%, #ff9a2e 48%, rgb(255 70 0 / 0.55) 64%, transparent 74%);
+  box-shadow:
+    0 0 6px 2px rgb(255 150 40 / 0.85),
+    0 0 18px 6px rgb(255 90 0 / 0.38),
+    0 0 34px 12px rgb(255 60 0 / 0.12);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.fire-embers span {
+  bottom: -14px;
+  opacity: 0;
+  animation:
+    brasa-sobe var(--d, 7s) cubic-bezier(0.25, 0.1, 0.55, 1) var(--atraso, 0s) infinite,
+    brasa-cintila 0.45s ease-in-out infinite alternate;
+}
+.fire-embers span::before,
+.fire-embers span::after { content: ""; left: 0; top: 0; }
+.fire-embers span::before {
+  --t: 5px;
+  transform: translate(-26px, 34px);
+  animation: brasa-irma 2.6s ease-in-out 0.8s infinite, brasa-cintila 0.33s ease-in-out infinite alternate;
+}
+.fire-embers span::after {
+  --t: 4px;
+  transform: translate(22px, 58px);
+  animation: brasa-irma 3.4s ease-in-out 1.7s infinite, brasa-cintila 0.4s ease-in-out infinite alternate-reverse;
+}
+.fire-embers span:nth-child(1) { left: 7%;  --t: 9px;  --d: 6.5s; --atraso: 0s;   --x1: 14px;  --x2: -10px; }
+.fire-embers span:nth-child(2) { left: 22%; --t: 7px;  --d: 8s;   --atraso: 1.6s; --x1: -18px; --x2: 12px; }
+.fire-embers span:nth-child(3) { left: 41%; --t: 11px; --d: 7.2s; --atraso: 3.1s; --x1: 10px;  --x2: -16px; }
+.fire-embers span:nth-child(4) { left: 60%; --t: 8px;  --d: 9s;   --atraso: 0.7s; --x1: -12px; --x2: 18px; }
+.fire-embers span:nth-child(5) { left: 77%; --t: 10px; --d: 6.8s; --atraso: 2.4s; --x1: 16px;  --x2: -8px; }
+.fire-embers span:nth-child(6) { left: 92%; --t: 7px;  --d: 8.4s; --atraso: 4s;   --x1: -14px; --x2: 10px; }
+
+@keyframes brasa-sobe {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1);                         opacity: 0; }
+  8%   {                                                                              opacity: 1; }
+  35%  { transform: translate(var(--x1, 12px), -110px) rotate(-12deg) scale(0.95); }
+  65%  { transform: translate(var(--x2, -10px), -210px) rotate(10deg) scale(0.75); opacity: 0.85; }
+  100% { transform: translate(calc(var(--x1, 12px) * 1.6), -320px) rotate(-6deg) scale(0.3); opacity: 0; }
+}
+@keyframes brasa-cintila {
+  from { filter: brightness(1) saturate(1); }
+  to   { filter: brightness(1.45) saturate(1.25); }
+}
+@keyframes brasa-irma {
+  0%, 100% { opacity: 0; }
+  30%, 60% { opacity: 0.95; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fire-embers span, .fire-embers span::before, .fire-embers span::after { animation: none; opacity: 0; }
+}
+
+/* Cartões esquentando: borda em brasa no topo ao passar o mouse */
+.card-3d::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffb35c 30%, #ff4d4d 70%, transparent);
+  opacity: 0;
+  transition: opacity 220ms ease;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .card-3d:hover::before { opacity: 1; }
+  .card-3d:hover {
+    border-color: oklch(0.6 0.2 40 / 0.5);
+    box-shadow:
+      0 2px 4px rgb(0 0 0 / 0.08),
+      0 22px 44px -18px oklch(0.55 0.22 35 / 0.5),
+      0 12px 24px -14px rgb(0 0 0 / 0.24);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fire::before,
+  .fire-embers span { animation: none; }
+}
+
+
+/* === Tema Operações: ambiente cinematográfico ========================== */
+/* Brilho distante de fogo no fundo da página (vinheta de "central de operações") */
+body {
+  background:
+    radial-gradient(55% 38% at 82% -5%, oklch(0.38 0.13 32 / 0.28), transparent 62%),
+    radial-gradient(45% 32% at 4% 104%, oklch(0.33 0.11 42 / 0.2), transparent 58%),
+    var(--background);
+  background-attachment: fixed;
+}
+
+.hero-fire-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.38;
+  mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.95), rgb(0 0 0 / 0.55) 60%, rgb(0 0 0 / 0.15));
+  -webkit-mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.95), rgb(0 0 0 / 0.55) 60%, rgb(0 0 0 / 0.15));
+  animation: hero-zoom 26s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform;
+}
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-fire-photo { animation: none; }
 }

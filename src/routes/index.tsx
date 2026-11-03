@@ -10,6 +10,7 @@ import { MESES, type Ferias, formatDate, getStatus } from "@/lib/ferias";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLoginButton } from "@/components/AdminLoginButton";
 import brasaoAsset from "@/assets/brasao.png.asset.json";
+import heroBg from "@/assets/hero-sertao-chamas.jpg";
 
 function yearOf(r: Ferias): number {
   if (r.data_inicio) return Number(r.data_inicio.slice(0, 4));
@@ -80,11 +81,15 @@ function Home() {
       <Toaster richColors position="top-right" />
 
       {/* HERO with brasão */}
-      <div
-        className="relative overflow-hidden border-b border-primary/20"
-        style={{ background: "var(--gradient-header)" }}
-      >
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,white,transparent_40%)]" />
+      <div className="hero-fire relative overflow-hidden">
+        <div
+          className="hero-fire-photo"
+          style={{ backgroundImage: `url(${heroBg})` }}
+          aria-hidden="true"
+        />
+        <div className="fire-embers pointer-events-none" aria-hidden="true">
+          <span /><span /><span /><span /><span /><span />
+        </div>
         <div className="absolute top-4 right-4 sm:top-5 sm:right-6 z-10 flex items-center gap-2">
           <Link
             to="/sobre"
@@ -98,19 +103,20 @@ function Home() {
           <img
             src={brasaoAsset.url}
             alt="Brasão 3º Grupamento de Bombeiros"
-            className="h-28 sm:h-36 w-auto drop-shadow-2xl"
+            className="float-3d brasao-fire h-28 sm:h-36 w-auto"
           />
           <div className="mt-4 inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-white/90 uppercase tracking-[0.25em]">
             <Siren className="h-3.5 w-3.5" />
             3º Grupamento de Bombeiros
           </div>
-          <h1 className="mt-2 font-display text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+          <h1 className="title-fire mt-2 font-display text-3xl sm:text-5xl font-extrabold leading-tight">
             Controle de Férias
           </h1>
           <p className="mt-3 max-w-2xl text-sm sm:text-base text-white/80">
             Gestão do efetivo organizada por mês, com busca instantânea por matrícula ou nome de guerra.
           </p>
         </div>
+        <div className="fire-stripes relative z-10" aria-hidden="true" />
       </div>
 
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">

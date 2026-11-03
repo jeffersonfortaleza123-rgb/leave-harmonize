@@ -123,6 +123,20 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // Copiar sempre como texto puro (sem cores, negrito ou fundo escuro do site)
+  useEffect(() => {
+    function copiarSemFormatacao(e: ClipboardEvent) {
+      const alvo = e.target as HTMLElement | null;
+      if (alvo?.closest("input, textarea")) return; // campos já copiam texto puro
+      const texto = window.getSelection()?.toString() ?? "";
+      if (!texto || !e.clipboardData) return;
+      e.clipboardData.setData("text/plain", texto);
+      e.preventDefault();
+    }
+    document.addEventListener("copy", copiarSemFormatacao);
+    return () => document.removeEventListener("copy", copiarSemFormatacao);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
